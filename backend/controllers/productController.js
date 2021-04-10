@@ -29,3 +29,5 @@ export {
     getProductById,
     getProducts
 }
+
+// // import this file in productRoutes.

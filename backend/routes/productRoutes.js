@@ -7,3 +7,5 @@ router.route('/').get(getProducts)
 router.route('/:id').get(getProductById)
 
 export default router
+
+// now add this routes file to server.js
