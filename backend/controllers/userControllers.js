@@ -3,6 +3,7 @@
 
 import User from '../models/UserModel.js'
 import asyncHandler from 'express-async-handler'
+import generateToken from '../utils/generateToken.js'
 
 // @desc        Auth user & get token
 // @route       post /api/users/login
@@ -19,7 +20,7 @@ const authUser = asyncHandler(async(req, res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: null
+            token: generateToken(user._id)
         })
     } else { //if wither email or password is incorrect
         res.status(401)
