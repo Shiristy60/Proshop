@@ -80,10 +80,37 @@ const getUserProfile = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc        Update user profile
+// @route       PUT /api/users/profile
+// @access      Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id)
+    if (user) {
+        user.name = req.body.name || user.name, // if user's name is changed
+            user.email = req.body.email || user.email // if user's email is changed
+            if (req.body.password) { // if user's password is changed
+                user.password = req.body.password
+        }
+        const updatesUser = await user.save() // save the data
+        // return the updated data
+        res.json({
+            _id: updatesUser._id,
+            name: updatesUser.name,
+            email: updatesUser.email,
+            isAdmin: updatesUser.isAdmin,
+            token: generateToken(updatesUser._id)
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
 export {
     authUser,
     registerUser,
-    getUserProfile
+    getUserProfile,
+    updateUserProfile
 }
 
 // import this file in userRoutes.
