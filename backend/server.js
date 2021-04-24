@@ -5,6 +5,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/products', productRoutes) // use productRoutes file for any url that goes through /api/products
 app.use('/api/users', userRoutes)   // use userRoutes file for any url that goes through /api/users
+app.use('/api/orders', orderRoutes)   // use userRoutes file for any url that goes through /api/users
 
 // middlewares
 app.use(notFound)
