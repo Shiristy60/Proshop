@@ -23,6 +23,7 @@ app.use('/api/products', productRoutes) // use productRoutes file for any url th
 app.use('/api/users', userRoutes)   // use userRoutes file for any url that goes through /api/users
 app.use('/api/orders', orderRoutes)   // use userRoutes file for any url that goes through /api/users
 
+// when we are ready to do our payment, we will hit this route and fetch the client id.
 app.get('/api/config/paypal', (req, res) => res.send(process.env.PAYPAL_CLIENT_ID))
 
 // middlewares
