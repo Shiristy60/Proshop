@@ -32,4 +32,10 @@ export const USER_DELETE_REQUEST = 'USER_DELETE_REQUEST'
 export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS'
 export const USER_DELETE_FAIL = 'USER_DELETE_FAIL'
 
+// update user for admin
+export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST'
+export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS'
+export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL'
+export const USER_UPDATE_RESET = 'USER_UPDATE_RESET'
+
 // now create reducers

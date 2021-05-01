@@ -21,7 +21,10 @@ import {
     USERS_LIST_RESET,
     USER_DELETE_REQUEST,
     USER_DELETE_SUCCESS,
-    USER_DELETE_FAIL
+    USER_DELETE_FAIL,
+    USER_UPDATE_FAIL,
+    USER_UPDATE_SUCCESS,
+    USER_UPDATE_REQUEST
 } from '../constants/userConstants'
 
 // login action - makes a request to login and get the token
@@ -193,6 +196,38 @@ export const deleteUser = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: USER_DELETE_FAIL,
+            payload: error.response && error.response.data.message ? error.response.data.message : error.message
+        })
+    }
+}
+
+export const updateUser = (user) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: USER_UPDATE_REQUEST
+        })
+
+        // extract userLogin.userInfo in localStorage
+        const { userLogin: { userInfo }} = getState()
+        // while actually sending data, in the headers we send a content-type.
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+        dispatch({
+            type: USER_UPDATE_SUCCESS
+        })
+        // update the details of user
+        dispatch({
+            type: USER_DETAILS_SUCCESS,
+            payload: data
+        })
+    } catch (error) {
+        dispatch({
+            type: USER_UPDATE_FAIL,
             payload: error.response && error.response.data.message ? error.response.data.message : error.message
         })
     }
