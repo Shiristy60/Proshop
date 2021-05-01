@@ -6,7 +6,10 @@ import {
     PRODUCT_LIST_FAIL,
     PRODUCT_DETAILS_REQUEST,
     PRODUCT_DETAILS_SUCCESS,
-    PRODUCT_DETAILS_FAIL
+    PRODUCT_DETAILS_FAIL,
+    PRODUCT_DELETE_SUCCESS,
+    PRODUCT_DELETE_FAIL,
+    PRODUCT_DELETE_REQUEST
 } from '../constants/productConstants.js'
 
 // make an asynchronized request.
@@ -51,6 +54,35 @@ export const listProductDetails = (id) => async (dispatch) => {
         })
     }
 
+}
+
+export const productDelete = (id) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: PRODUCT_DELETE_REQUEST
+        })
+
+        // extract userLogin.userInfo in localStorage
+        const { userLogin: { userInfo }} = getState()
+        // while actually sending data, in the headers we send a content-type.
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        await axios.delete(`/api/products/${id}`, config) 
+        dispatch({
+            type: PRODUCT_DELETE_SUCCESS
+        })
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_DELETE_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message
+        })
+    }
 }
 
 // fire these actions from our homescreen.

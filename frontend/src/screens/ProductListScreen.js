@@ -4,13 +4,16 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.js'
 import Loader from '../components/Loader.js'
+import { productDelete, listProducts } from '../actions/productActions.js'
 
-import { listProducts } from '../actions/productActions.js'
-const ProductListScreen = ({match, history}) => {
+const ProductListScreen = ({ match, history }) => {
     const dispatch = useDispatch()
     
     const productsList = useSelector(state => state.productsList)
     const { loading, error, products } = productsList
+
+    const deleteProduct = useSelector(state => state.deleteProduct)
+    const { loading: loadingDelete, error:errorDelete, success:successDelete } = deleteProduct
     
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
@@ -22,7 +25,7 @@ const ProductListScreen = ({match, history}) => {
         } else {
             history.push('/login')
         }
-    }, [dispatch, history, userInfo ])
+    }, [dispatch, history, userInfo, successDelete ])
     
     const createProductHandler = (product) => {
         // CREATE PRODUCT
@@ -30,8 +33,7 @@ const ProductListScreen = ({match, history}) => {
 
     const deleteHandler = (id) => {
         if (window.confirm('Are you sure?')) {
-            // DELETE PRODUCTS
-            //dispatch(deleteProduct(id))
+            dispatch(productDelete(id))
         }
     }
 
@@ -43,10 +45,12 @@ const ProductListScreen = ({match, history}) => {
                 </Col>
                 <Col className='text-right'>
                     <Button className='my-3' onClick={createProductHandler}>
-                        <i className = 'fas fa-plus'></i>Create Product
+                        <i className = 'fas fa-plus'></i> Create Product
                     </Button>
                 </Col>
             </Row>
+            {loadingDelete && <Loader />}
+            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {loading
                 ? <Loader />
                 : error
@@ -66,7 +70,7 @@ const ProductListScreen = ({match, history}) => {
                         <tbody>
                             {products.map(product => (
                                 <tr key={product._id}>
-                                    <td>{product.id}</td>
+                                    <td>{product._id}</td>
                                     <td>{product.name}</td>
                                     <td>${product.price}</td>
                                     <td>{product.category}</td>
