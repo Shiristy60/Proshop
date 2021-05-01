@@ -91,14 +91,14 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             if (req.body.password) { // if user's password is changed
                 user.password = req.body.password
         }
-        const updatesUser = await user.save() // save the data
+        const updatedUser = await user.save() // save the data
         // return the updated data
         res.json({
-            _id: updatesUser._id,
-            name: updatesUser.name,
-            email: updatesUser.email,
-            isAdmin: updatesUser.isAdmin,
-            token: generateToken(updatesUser._id)
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+            token: generateToken(updatedUser._id)
         })
     } else {
         res.status(404)
@@ -128,12 +128,61 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 })
 
+// @desc        Get user by id
+// @route       GET /api/users/:id
+// @access      Private/Admin
+const getUserById = asyncHandler(async (req, res) => {
+    const user = await User
+        .findById(req.params.id)
+        .select('-password')
+    if (user) {
+        res.json(user)
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
+// @desc        Update user only for admin
+// @route       PUT /api/users/:id
+// @access      Private/Admin
+const updateUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if (user) {
+        user.name = req.body.name || user.name, // if user's name is changed
+        user.email = req.body.email || user.email // if user's email is changed
+        
+        //user.isAdmin = req.body.isAdmin || user.isAdmin doesn't work.
+        /* what if the admin wants to change an admin to not being an admin? 
+        In that case, req.body.isAdmin will be false.  Now, if req.body.isAdmin is false, it
+        will just default to user.isAdmin.  user.isAdmin is going to be able to get assigned the value in 
+        req.body.isAdmin only if req.body.isAdmin is true. However, if an admin wants to take away another 
+        user's admin rights, they'd be making req.body.isAdmin false, but when the code above is reached, user.isAdmin will stay true!
+        Therefore, in order to allow an admin user to take away another user's admin rights, this is used. */
+        
+        user.isAdmin = req.body.isAdmin === undefined ? user.isAdmin : req.body.isAdmin
+        const updatedUser = await user.save() // save the data
+        // return the updated data
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            isAdmin: updatedUser.isAdmin,
+        })
+    } else {
+        res.status(404)
+        throw new Error('User not found')
+    }
+})
+
 export {
     authUser,
     getUsers,
     deleteUser,
     registerUser,
     getUserProfile,
+    getUserById,
+    updateUser,
     updateUserProfile
 }
 
