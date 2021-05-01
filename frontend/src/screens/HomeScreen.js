@@ -16,8 +16,8 @@ const HomeScreen = () => {
 
     // to use parts of state we need useSelector.
     // useSelector takes an arrow function, it takes in state and what part of state we want.
-    const productList = useSelector(state => state.productList)
-    const { loading, error, products} = productList // destructuring and using the desired data from productList.
+    const productsList = useSelector(state => state.productsList)
+    const { loading, error, products} = productsList // destructuring and using the desired data from productList.
 
     // runs as soon as the component loads
     useEffect(() => {
