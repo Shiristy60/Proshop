@@ -3,6 +3,9 @@ import {
     USERS_LIST_REQUEST,
     USERS_LIST_RESET,
     USERS_LIST_SUCCESS,
+    USER_DELETE_FAIL,
+    USER_DELETE_REQUEST,
+    USER_DELETE_SUCCESS,
     USER_DETAILS_FAIL,
     USER_DETAILS_REQUEST,
     USER_DETAILS_RESET,
@@ -88,8 +91,21 @@ export const usersListReducer = (state = {users: []}, action) => {
             return { loading: false, users: action.payload }
         case USERS_LIST_FAIL:     // a failed response(error) from server
             return { loading: false, error: action.payload }
-            case USERS_LIST_RESET:     // a failed response(error) from server
+        case USERS_LIST_RESET:     // a failed response(error) from server
             return {users: []}
+        default:
+            return state
+    }
+}
+
+export const userDeleteReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_DELETE_REQUEST:  // make a request for user
+            return {loading: true}
+        case USER_DELETE_SUCCESS:  // a successful response from server
+            return { loading: false, success: true }
+        case USER_DELETE_FAIL:     // a failed response(error) from server
+            return { loading: false, error: action.payload }
         default:
             return state
     }
