@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message.js'
 import Loader from '../components/Loader.js'
 import FormContainer from '../components/FormContainer.js'
-import { listProductDetails, updateProduct } from '../actions/productActions.js'
+import { listProductDetails, productUpdate } from '../actions/productActions.js'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants.js'
 
 const ProductEditScreen = ({match, history}) => {
 
@@ -25,15 +26,15 @@ const ProductEditScreen = ({match, history}) => {
     const productDetails = useSelector(state => state.productDetails)
     const { loading, error, product } = productDetails
 
-    //const productUpdate = useSelector(state => state.productUpdate)
-    //const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = productUpdate
+    const updateProduct = useSelector(state => state.updateProduct)
+    const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } = updateProduct
 
     // if already logged in( userInfo already exists), go to the homescreen
     useEffect(() => {
-        // user successfully updated by admin
-        /*if (successUpdate) {
-            dispatch({ type: USER_UPDATE_RESET })
-            history.push('/admin/userslist')
+        // product successfully updated by admin
+        if (successUpdate) {
+            dispatch({ type: PRODUCT_UPDATE_RESET })
+            history.push('/admin/productslist')
         } else {
             // if there is no user
             // userId is in url  */
@@ -48,14 +49,23 @@ const ProductEditScreen = ({match, history}) => {
                 setCountInStock(product.countInStock)
                 setDescription(product.description)
             }
-        //}
-    }, [dispatch, history, productId, product])
+        }
+    }, [dispatch, history, productId, product, successUpdate])
 
     const submitHandler = (e) => {
         e.preventDefault()
-        //dispatch(
-            //updateUser({ _id: userId, name, email, isAdmin })
-        //)
+        dispatch(
+            productUpdate({
+                _id: productId,
+                name,
+                price,
+                image,
+                brand,
+                category,
+                countInStock,
+                description
+            })
+        )
     }
 
     return (
@@ -65,8 +75,8 @@ const ProductEditScreen = ({match, history}) => {
             </Link>
             <FormContainer>
                 <h1>Edit Product</h1>
-                {/*loadingUpdate && <Loader />}
-                {errorUpdate && <Message variant='danger'>{ errorUpdate }</Message>*/}
+                {loadingUpdate && <Loader />}
+                {errorUpdate && <Message variant='danger'>{ errorUpdate }</Message>}
                 {loading
                     ? <Loader />
                     : error
