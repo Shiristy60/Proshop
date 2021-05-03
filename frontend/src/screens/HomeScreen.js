@@ -8,6 +8,7 @@ import Loader from '../components/Loader.js'
 import Message from '../components/Message.js'
 import { listProducts } from '../actions/productActions'
 import Paginate from '../components/Paginate.js'
+import ProductCarousel from '../components/ProductCarousel.js'
 
 // React hooks allow your React components to interact with the Redux store.
 const HomeScreen = ({match}) => {
@@ -33,6 +34,7 @@ const HomeScreen = ({match}) => {
 
     return (
         <>
+            {!keyword && <ProductCarousel/> }
             <h1>Latest Products</h1>
             { loading ? (
                 <Loader/>
