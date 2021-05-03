@@ -23,12 +23,12 @@ import {
 } from '../constants/productConstants.js'
 
 // make an asynchronized request.
-export const listProducts = () => async (dispatch) => {
+export const listProducts = (keyword='') => async (dispatch) => {
     try {
         // calls in the reducer the corresponsng action.type case and set loading to true.
         dispatch({ type: PRODUCT_LIST_REQUEST })
 
-        const { data } = await axios.get('/api/products')
+        const { data } = await axios.get(`/api/products?keyword=${keyword}`)
 
         // calls in the reducer the corresponding action.type case and set loading to false and loads the products in the data variable that we fetched from our axios request.
         dispatch({

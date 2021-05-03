@@ -9,7 +9,11 @@ import Message from '../components/Message.js'
 import { listProducts } from '../actions/productActions'
 
 // React hooks allow your React components to interact with the Redux store.
-const HomeScreen = () => {
+const HomeScreen = ({match}) => {
+
+    // check for keyword in searchbox
+    const keyword = match.params.keyword
+
     // to dispatch(call) listProduct action we need useDispatch
     // we are here using hooks. Instead of using connect, we use useDispatch here, which saves our time of using mapStateToProps
     const dispatch = useDispatch()
@@ -21,8 +25,8 @@ const HomeScreen = () => {
 
     // runs as soon as the component loads
     useEffect(() => {
-       dispatch(listProducts())
-    }, [dispatch])
+       dispatch(listProducts(keyword))
+    }, [dispatch, keyword])
 
     return (
         <>
