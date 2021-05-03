@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { productsListReducer, productDetailsReducer, deleteProductReducer, createProductReducer, updateProductReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers.js'
 import { userDeleteReducer, userDetailsReducer, userLoginReducer, userRegisterReducer, usersListReducer, userUpdateProfileReducer, userUpdateReducer } from './reducers/userReducers.js'
-import { listMyOrdersReducer, orderCreateReducer, orderDetailsReducer, orderPayReducer } from './reducers/orderReducers'
+import { listMyOrdersReducer, listAllOrdersReducer, orderCreateReducer, orderDetailsReducer, orderPayReducer, orderDeliverReducer } from './reducers/orderReducers'
 
 const reducer = combineReducers({
     cart: cartReducer,
@@ -26,7 +26,9 @@ const reducer = combineReducers({
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
-    listOrders: listMyOrdersReducer
+    orderDeliver: orderDeliverReducer,
+    listOrders: listMyOrdersReducer,
+    listAllOrders: listAllOrdersReducer
     // add actions now
 })
 

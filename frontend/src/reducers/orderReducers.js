@@ -12,7 +12,15 @@ import {
     LIST_MY_ORDERS_REQUEST,
     LIST_MY_ORDERS_SUCCESS,
     LIST_MY_ORDERS_FAIL,
-    LIST_MY_ORDERS_RESET
+    LIST_MY_ORDERS_RESET,
+    LIST_ALL_ORDERS_REQUEST,
+    LIST_ALL_ORDERS_SUCCESS,
+    LIST_ALL_ORDERS_FAIL,
+    LIST_ALL_ORDERS_RESET,
+    ORDER_DELIVER_FAIL,
+    ORDER_DELIVER_SUCCESS,
+    ORDER_DELIVER_REQUEST,
+    ORDER_DELIVER_RESET
 } from '../constants/orderConstants.js'
 
 export const orderCreateReducer = (state = {}, action) => {
@@ -82,6 +90,29 @@ export const orderPayReducer = ( state = {}, action) => {
     }
 }
 
+export const orderDeliverReducer = ( state = {}, action) => {
+    switch (action.type) {
+        case ORDER_DELIVER_REQUEST:
+            return {
+                loading: true
+            }
+        case ORDER_DELIVER_SUCCESS:
+            return {
+                loading: false,
+                success: true
+            }
+        case ORDER_DELIVER_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case ORDER_DELIVER_RESET:
+            return {}
+        default:
+            return state
+    }
+}
+
 export const listMyOrdersReducer = ( state = { orders : [] }, action) => {
     switch (action.type) {
         case LIST_MY_ORDERS_REQUEST:
@@ -99,6 +130,31 @@ export const listMyOrdersReducer = ( state = { orders : [] }, action) => {
                 error: action.payload
             }
         case LIST_MY_ORDERS_RESET:
+            return {
+                orders: []
+            }
+        default:
+            return state
+    }
+}
+
+export const listAllOrdersReducer = ( state = { orders : [] }, action) => {
+    switch (action.type) {
+        case LIST_ALL_ORDERS_REQUEST:
+            return {
+                loading: true
+            }
+        case LIST_ALL_ORDERS_SUCCESS:
+            return {
+                loading: false,
+                orders: action.payload
+            }
+        case LIST_ALL_ORDERS_FAIL:
+            return {
+                loading: false,
+                error: action.payload
+            }
+        case LIST_ALL_ORDERS_RESET:
             return {
                 orders: []
             }
