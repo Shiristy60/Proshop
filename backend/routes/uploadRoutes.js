@@ -9,7 +9,7 @@ import path from 'path'
 const storage = multer.diskStorage({
     // cb- callback, is a function that takes error and the destination where the file will be stored
     destination(req, file, cb) {
-        cb(null, '/uploads')
+        cb(null, 'uploads/')
     },
     // name the file
     filename(req, file, cb) {
@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
 })
 
 // check if file has extension of jpg, jpeg, png
+// A media type (also known as a Multipurpose Internet Mail Extensions or MIME type) is a standard that indicates the nature and format of a document, file, or assortment of bytes.
 function checkFileType(file, cb) {
     const filetypes = /jpeg|jpg|png/
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase())
@@ -39,7 +40,7 @@ const upload = multer({
 })
 
 router.post('/', upload.single('image'), (req, res) => {
-    res.send(`${req.file.path}`)
+    res.send(`/${req.file.path}`)
 })
 
 export default router
