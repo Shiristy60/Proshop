@@ -15,7 +15,11 @@ import {
     PRODUCT_CREATE_REQUEST,
     PRODUCT_UPDATE_REQUEST,
     PRODUCT_UPDATE_SUCCESS,
-    PRODUCT_UPDATE_FAIL
+    PRODUCT_UPDATE_FAIL,
+    PRODUCT_CREATE_REVIEW_FAIL,
+    PRODUCT_CREATE_REVIEW_SUCCESS,
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_RESET
 } from '../constants/productConstants.js'
 
 // make an asynchronized request.
@@ -52,6 +56,7 @@ export const listProductDetails = (id) => async (dispatch) => {
             type: PRODUCT_DETAILS_SUCCESS,
             payload: data
         })
+        dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
     catch(error) {
         dispatch({
@@ -152,4 +157,33 @@ export const productUpdate = (product) => async (dispatch, getState) => {
     }
 }
 
+export const createProductReview = (productId, review) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: PRODUCT_CREATE_REVIEW_REQUEST
+        })
+
+        // extract userLogin.userInfo in localStorage
+        const { userLogin: { userInfo }} = getState()
+        // while actually sending data, in the headers we send a content-type.
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        await axios.post(`/api/products/${productId}/reviews`, review, config)
+        dispatch({
+            type: PRODUCT_CREATE_REVIEW_SUCCESS
+        })
+    } catch (error) {
+        dispatch({
+            type: PRODUCT_CREATE_REVIEW_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message
+        })
+    }
+}
 // fire these actions from our homescreen.

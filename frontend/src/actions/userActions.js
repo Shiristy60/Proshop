@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { LIST_ALL_ORDERS_RESET, LIST_MY_ORDERS_RESET } from '../constants/orderConstants'
+import {PRODUCT_CREATE_REVIEW_RESET} from '../constants/productConstants'
 import {
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
@@ -240,6 +241,7 @@ export const logout = () => (dispatch) => {
     dispatch({ type: LIST_MY_ORDERS_RESET })    // clear user's orders from state
     dispatch({ type: USERS_LIST_RESET }) // clear users list
     dispatch({ type: LIST_ALL_ORDERS_RESET }) // clear orders list
+    dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
 }
 
 // load these initially in store.js
