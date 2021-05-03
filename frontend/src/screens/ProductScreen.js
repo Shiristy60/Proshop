@@ -7,6 +7,7 @@ import { createProductReview, listProductDetails } from '../actions/productActio
 import Message from '../components/Message.js';
 import Loader from '../components/Loader.js';
 import {PRODUCT_CREATE_REVIEW_RESET} from '../constants/productConstants'
+import Meta from '../components/Meta';
 
 const ProductScreen = ({ history, match }) => {
     // qty shows the number of items in stock.
@@ -62,6 +63,7 @@ const ProductScreen = ({ history, match }) => {
                     (<Message variant='danger'>{error} </Message>)
                 :   (
                         <>
+                            <Meta title={product.name} />
                         <Row>
                             <Col md={6}>
                                 <Image fluid src={product.image} alt={ product.name }/>
