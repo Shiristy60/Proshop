@@ -9,6 +9,10 @@ import asyncHandler from 'express-async-handler'
 // @access      Public
 const getProducts = asyncHandler(async(req, res) => {
     
+    // for pagination
+    const pageSize = 10
+    const page = Number(req.query.pageNumber) || 1
+
     const keyword = req.query.keyword ?
         {
             name: {
@@ -17,8 +21,15 @@ const getProducts = asyncHandler(async(req, res) => {
             }
         } : {}
 
-    const products = await Product.find({...keyword})
-    res.json(products)
+    // total number of products
+    const count = await Product.countDocuments({ ...keyword }) 
+    
+    // move to the respective page and display pageSize number of products
+    const products = await Product.find({...keyword}).limit(pageSize).skip(pageSize * (page-1)) 
+    
+    // return page and number of pages
+    // Math.ceil(count / pageSize) - round off number of pages
+    res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 // @desc        Fetch single product
